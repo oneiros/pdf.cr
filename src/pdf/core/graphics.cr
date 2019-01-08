@@ -1,25 +1,27 @@
 module PDF
   module Core
     class Graphics < Primitives::Stream
+      alias Coordinate = Int32 | Float64
+
       @instructions = [] of String
 
       def initialize
         super("")
       end
 
-      def path(x : Int32, y : Int32)
+      def path(x : Coordinate, y : Coordinate)
         @instructions << "#{x} #{y} m\n"
       end
 
-      def line(x : Int32, y : Int32)
+      def line(x : Coordinate, y : Coordinate)
         @instructions << "#{x} #{y} l\n"
       end
 
-      def bezier(x1 : Float64, y1 : Float64, x2 : Float64, y2 : Float64, x3 : Int32, y3 : Int32)
+      def bezier(x1 : Float64, y1 : Float64, x2 : Float64, y2 : Float64, x3 : Coordinate, y3 : Coordinate)
         @instructions << "#{x1} #{y1} #{x2} #{y2} #{x3} #{y3} c\n"
       end
 
-      def circle(x : Int32, y : Int32, radius : Int32)
+      def circle(x : Coordinate, y : Coordinate, radius : Coordinate)
         magic = radius * 0.551784
         radius_f = radius.to_f64
         path(x - radius, y)
@@ -33,7 +35,7 @@ module PDF
         @instructions << "h\n"
       end
 
-      def rectangle(x : Int32, y : Int32, width : Int32, height : Int32)
+      def rectangle(x : Coordinate, y : Coordinate, width : Coordinate, height : Coordinate)
         @instructions << "#{x} #{y} #{width} #{height} re\n"
       end
 

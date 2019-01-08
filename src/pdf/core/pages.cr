@@ -1,10 +1,11 @@
 class PDF::Core::Pages < PDF::Core::Primitives::Dictionary
   @pages = [] of Page
 
-  def initialize
+  def initialize(width : Float64, height : Float64)
+    media_box = [0.0, 0.0, width, height]
     super(
       type: :pages,
-      media_box: Primitives::Array.new([0, 0, 300, 144].map { |i| Primitives::Integer.new(i) })
+      media_box: Primitives::Array.new(media_box.map { |f| Primitives::Real.new(f) })
     )
   end
 

@@ -1,8 +1,9 @@
 class PDF::Core::File
-  @pages_root = Pages.new
+  @pages_root : Pages
   @objects = {} of Int32 => Primitives::Object
 
-  def initialize
+  def initialize(width : Float64 = 300.0, height : Float64 = 144.0)
+    @pages_root = Pages.new(width, height)
     @objects[1] = @pages_root
     @pages_root.number = 2
     @document_catalog = Catalog.new(@pages_root)
@@ -16,6 +17,11 @@ class PDF::Core::File
     @last_object_number += 1
     object.number = @last_object_number
     @objects[@last_object_number] = object
+  end
+
+  def add_page(page : Page)
+    add_object(page)
+    @pages_root.add_page(page)
   end
 
   def write(path : String)
